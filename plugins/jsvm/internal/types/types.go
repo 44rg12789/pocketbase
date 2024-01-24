@@ -1,12 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
 	"reflect"
 	"runtime"
 	"strings"
+	"time"
 
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/plugins/jsvm"
@@ -208,6 +210,20 @@ declare var $template: template.Registry
  * @group PocketBase
  */
 declare function readerToString(reader: any, maxBytes?: number): string;
+
+/**
+ * sleep pauses the current goroutine for at least the specified user duration (in ms).
+ * A zero or negative duration returns immediately.
+ *
+ * Example:
+ *
+ * ` + "```" + `js
+ * sleep(250) // sleeps for 250ms
+ * ` + "```" + `
+ *
+ * @group PocketBase
+ */
+declare function sleep(milliseconds: number): void;
 
 /**
  * arrayOf creates a placeholder array of the specified models.
@@ -1094,6 +1110,10 @@ func main() {
 	result = strings.ReplaceAll(result, "pocketbase.PocketBase", "PocketBase")
 	result = strings.ReplaceAll(result, "ORIGINAL_CORE_APP", "core.App")
 	result = strings.ReplaceAll(result, "ORIGINAL_POCKETBASE", "pocketbase.PocketBase")
+
+	// prepend a timestamp with the generation time
+	// so that it can be compared without reading the entire file
+	result = fmt.Sprintf("// %d\n%s", time.Now().Unix(), result)
 
 	parentDir := filepath.Dir(filename)
 	typesFile := filepath.Join(parentDir, "generated", "types.d.ts")

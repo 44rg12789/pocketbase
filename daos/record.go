@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"sort"
 	"strings"
 
 	"github.com/pocketbase/dbx"
@@ -409,9 +410,9 @@ func (dao *Dao) IsRecordValueUnique(
 	return query.Row(&exists) == nil && !exists
 }
 
-// FindAuthRecordByToken finds the auth record associated with the provided JWT token.
+// FindAuthRecordByToken finds the auth record associated with the provided JWT.
 //
-// Returns an error if the JWT token is invalid, expired or not associated to an auth collection record.
+// Returns an error if the JWT is invalid, expired or not associated to an auth collection record.
 func (dao *Dao) FindAuthRecordByToken(token string, baseTokenKey string) (*models.Record, error) {
 	unverifiedClaims, err := security.ParseUnverifiedJWT(token)
 	if err != nil {
@@ -660,9 +661,23 @@ func (dao *Dao) DeleteRecord(record *models.Record) error {
 func (dao *Dao) cascadeRecordDelete(mainRecord *models.Record, refs map[*models.Collection][]*schema.SchemaField) error {
 	uniqueJsonEachAlias := "__je__" + security.PseudorandomString(4)
 
-	for refCollection, fields := range refs {
-		if refCollection.IsView() {
-			continue // skip view collections
+	// @todo consider changing refs to a slice
+	//
+	// Sort the refs keys to ensure that the cascade events firing order is always the same.
+	// This is not necessary for the operation to function correctly but it helps having deterministic output during testing.
+	sortedRefKeys := make([]*models.Collection, 0, len(refs))
+	for k := range refs {
+		sortedRefKeys = append(sortedRefKeys, k)
+	}
+	sort.Slice(sortedRefKeys, func(i, j int) bool {
+		return sortedRefKeys[i].Name < sortedRefKeys[j].Name
+	})
+
+	for _, refCollection := range sortedRefKeys {
+		fields, ok := refs[refCollection]
+
+		if refCollection.IsView() || !ok {
+			continue // skip missing or view collections
 		}
 
 		for _, field := range fields {

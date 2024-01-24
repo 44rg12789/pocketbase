@@ -19,6 +19,8 @@ import (
 )
 
 func TestRecordQueryWithDifferentCollectionValues(t *testing.T) {
+	t.Parallel()
+
 	app, _ := tests.NewTestApp()
 	defer app.Cleanup()
 
@@ -58,6 +60,8 @@ func TestRecordQueryWithDifferentCollectionValues(t *testing.T) {
 }
 
 func TestRecordQueryOneWithRecord(t *testing.T) {
+	t.Parallel()
+
 	app, _ := tests.NewTestApp()
 	defer app.Cleanup()
 
@@ -82,6 +86,8 @@ func TestRecordQueryOneWithRecord(t *testing.T) {
 }
 
 func TestRecordQueryAllWithRecordsSlices(t *testing.T) {
+	t.Parallel()
+
 	app, _ := tests.NewTestApp()
 	defer app.Cleanup()
 
@@ -143,6 +149,8 @@ func TestRecordQueryAllWithRecordsSlices(t *testing.T) {
 }
 
 func TestFindRecordById(t *testing.T) {
+	t.Parallel()
+
 	app, _ := tests.NewTestApp()
 	defer app.Cleanup()
 
@@ -203,6 +211,8 @@ func TestFindRecordById(t *testing.T) {
 }
 
 func TestFindRecordsByIds(t *testing.T) {
+	t.Parallel()
+
 	app, _ := tests.NewTestApp()
 	defer app.Cleanup()
 
@@ -294,6 +304,8 @@ func TestFindRecordsByIds(t *testing.T) {
 }
 
 func TestFindRecordsByExpr(t *testing.T) {
+	t.Parallel()
+
 	app, _ := tests.NewTestApp()
 	defer app.Cleanup()
 
@@ -364,6 +376,8 @@ func TestFindRecordsByExpr(t *testing.T) {
 }
 
 func TestFindFirstRecordByData(t *testing.T) {
+	t.Parallel()
+
 	app, _ := tests.NewTestApp()
 	defer app.Cleanup()
 
@@ -427,6 +441,8 @@ func TestFindFirstRecordByData(t *testing.T) {
 }
 
 func TestFindRecordsByFilter(t *testing.T) {
+	t.Parallel()
+
 	app, _ := tests.NewTestApp()
 	defer app.Cleanup()
 
@@ -530,6 +546,19 @@ func TestFindRecordsByFilter(t *testing.T) {
 				"llvuca81nly1qls",
 			},
 		},
+		{
+			"with json filter and sort",
+			"demo4",
+			"json_object != null && json_object.a.b = 'test'",
+			"-json_object.a",
+			10,
+			0,
+			[]dbx.Params{{"active": false}},
+			false,
+			[]string{
+				"i9naidtvr6qsgb4",
+			},
+		},
 	}
 
 	for _, s := range scenarios {
@@ -566,6 +595,8 @@ func TestFindRecordsByFilter(t *testing.T) {
 }
 
 func TestFindFirstRecordByFilter(t *testing.T) {
+	t.Parallel()
+
 	app, _ := tests.NewTestApp()
 	defer app.Cleanup()
 
@@ -647,6 +678,8 @@ func TestFindFirstRecordByFilter(t *testing.T) {
 }
 
 func TestCanAccessRecord(t *testing.T) {
+	t.Parallel()
+
 	app, _ := tests.NewTestApp()
 	defer app.Cleanup()
 
@@ -814,6 +847,8 @@ func TestCanAccessRecord(t *testing.T) {
 }
 
 func TestIsRecordValueUnique(t *testing.T) {
+	t.Parallel()
+
 	app, _ := tests.NewTestApp()
 	defer app.Cleanup()
 
@@ -863,6 +898,8 @@ func TestIsRecordValueUnique(t *testing.T) {
 }
 
 func TestFindAuthRecordByToken(t *testing.T) {
+	t.Parallel()
+
 	app, _ := tests.NewTestApp()
 	defer app.Cleanup()
 
@@ -925,6 +962,8 @@ func TestFindAuthRecordByToken(t *testing.T) {
 }
 
 func TestFindAuthRecordByEmail(t *testing.T) {
+	t.Parallel()
+
 	app, _ := tests.NewTestApp()
 	defer app.Cleanup()
 
@@ -956,6 +995,8 @@ func TestFindAuthRecordByEmail(t *testing.T) {
 }
 
 func TestFindAuthRecordByUsername(t *testing.T) {
+	t.Parallel()
+
 	app, _ := tests.NewTestApp()
 	defer app.Cleanup()
 
@@ -988,6 +1029,8 @@ func TestFindAuthRecordByUsername(t *testing.T) {
 }
 
 func TestSuggestUniqueAuthRecordUsername(t *testing.T) {
+	t.Parallel()
+
 	app, _ := tests.NewTestApp()
 	defer app.Cleanup()
 
@@ -1025,6 +1068,8 @@ func TestSuggestUniqueAuthRecordUsername(t *testing.T) {
 }
 
 func TestSaveRecord(t *testing.T) {
+	t.Parallel()
+
 	app, _ := tests.NewTestApp()
 	defer app.Cleanup()
 
@@ -1058,6 +1103,8 @@ func TestSaveRecord(t *testing.T) {
 }
 
 func TestSaveRecordWithIdFromOtherCollection(t *testing.T) {
+	t.Parallel()
+
 	app, _ := tests.NewTestApp()
 	defer app.Cleanup()
 
@@ -1090,6 +1137,8 @@ func TestSaveRecordWithIdFromOtherCollection(t *testing.T) {
 }
 
 func TestDeleteRecord(t *testing.T) {
+	t.Parallel()
+
 	app, _ := tests.NewTestApp()
 	defer app.Cleanup()
 
@@ -1167,6 +1216,8 @@ func TestDeleteRecord(t *testing.T) {
 }
 
 func TestDeleteRecordBatchProcessing(t *testing.T) {
+	t.Parallel()
+
 	app, _ := tests.NewTestApp()
 	defer app.Cleanup()
 

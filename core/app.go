@@ -59,6 +59,9 @@ type App interface {
 	// (used for settings encryption).
 	EncryptionEnv() string
 
+	// IsDev returns whether the app is in dev mode.
+	IsDev() bool
+
 	// Settings returns the loaded app settings.
 	Settings() *settings.Settings
 
@@ -288,14 +291,14 @@ type App interface {
 	// SSE client connection.
 	OnRealtimeDisconnectRequest() *hook.Hook[*RealtimeDisconnectEvent]
 
-	// OnRealtimeBeforeMessage hook is triggered right before sending
+	// OnRealtimeBeforeMessageSend hook is triggered right before sending
 	// an SSE message to a client.
 	//
 	// Returning [hook.StopPropagation] will prevent sending the message.
 	// Returning any other non-nil error will close the realtime connection.
 	OnRealtimeBeforeMessageSend() *hook.Hook[*RealtimeMessageEvent]
 
-	// OnRealtimeBeforeMessage hook is triggered right after sending
+	// OnRealtimeAfterMessageSend hook is triggered right after sending
 	// an SSE message to a client.
 	OnRealtimeAfterMessageSend() *hook.Hook[*RealtimeMessageEvent]
 
